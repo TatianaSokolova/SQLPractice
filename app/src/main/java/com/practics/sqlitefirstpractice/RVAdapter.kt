@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class RVAdapter(
     private val context: Context,
-    private val items: ArrayList<PersonData>
+    private val items: ArrayList<PersonData>,
+    private val listener: RVListener
  ) : RecyclerView.Adapter<RVAdapter.ViewHolder> () {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,6 +29,9 @@ class RVAdapter(
          * можно (лучше?) использовать метод bind во вьюхолдере,
          * где и проводить обновление полей
          */
+        holder.deleteBtn.setOnClickListener {
+            listener.deleteRecord(item)
+        }
     }
 
     override fun getItemCount(): Int {

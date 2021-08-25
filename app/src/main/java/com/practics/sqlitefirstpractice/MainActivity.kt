@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), RVListener {
 
     private val TAG = "MyLog"
 
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             recycler.layoutManager = manager
 
             //создаем класс адаптер, передаем конткст и список
-            val itemAdapter = RVAdapter(this, getItemsList())
+            val itemAdapter = RVAdapter(this, getItemsList(), this)
             //передаем созданный адаптер, чтобы заинфлейтить айтемы
             recycler.adapter = itemAdapter
         } else {
@@ -93,5 +93,16 @@ class MainActivity : AppCompatActivity() {
         } else {
             Toast.makeText(applicationContext, "Name or email cannot be blank", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun deleteRecord(personData: PersonData) {
+        val databaseHandler = DatabaseHandler(this)
+
+        val status = databaseHandler.deletePerson(PersonData(personData.id, "", ""))
+        if (status > -1) {
+            Toast.makeText(applicationContext, "Record delete successfully", Toast.LENGTH_SHORT).show()
+            setupListOfDataIntoRV()
+        }
+
     }
 }
